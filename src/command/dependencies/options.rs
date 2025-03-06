@@ -50,6 +50,33 @@ impl Display for LayoutAlgorithm {
     }
 }
 
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
+pub enum PrinterType {
+    Graphviz,
+    D2,
+}
+
+impl FromStr for PrinterType {
+    type Err = &'static str;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "graphviz" => Ok(Self::Graphviz),
+            "d2" => Ok(Self::D2),
+            _ => Err("Unrecognized printer"),
+        }
+    }
+}
+
+impl Display for PrinterType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
+            Self::Graphviz => "graphviz",
+            Self::D2 => "d2",
+        })
+    }
+}
+
 #[derive(Parser, Clone, PartialEq, Eq, Debug)]
 #[group(id = "GenerateSelectionOptions")]
 pub struct Options {
@@ -70,6 +97,11 @@ pub struct Options {
     /// (e.g. none, dot, neato, twopi, circo, fdp, sfdp).
     #[arg(long = "layout", default_value = "neato")]
     pub layout: LayoutAlgorithm,
+
+    /// The printer to use
+    /// (e.g. graphviz, d2).
+    #[arg(long = "printer", default_value = "graphviz")]
+    pub printer: PrinterType,
 
     /// Focus the graph on a particular path or use-tree's environment,
     /// e.g. "foo::bar::{self, baz, blee::*}".

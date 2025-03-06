@@ -11,6 +11,7 @@ use petgraph::graph::NodeIndex;
 
 use crate::{
     analyzer::LoadOptions,
+    command::dependencies::{options::PrinterType, printer::*},
     graph::{Edge, Graph, GraphBuilder, Node},
 };
 
@@ -18,7 +19,6 @@ use super::{
     cycles::tri_color::{CycleDetector, TriColorDepthFirstSearch},
     filter::Filter,
     options::{LayoutAlgorithm, Options},
-    printer::Printer,
 };
 
 #[derive(Parser, Clone, PartialEq, Eq, Debug)]
@@ -71,8 +71,18 @@ impl Command {
 
         let mut string = String::new();
 
-        let printer = Printer::new(&self.options, krate, db, edition);
-        printer.fmt(&mut string, &graph, crate_node_idx)?;
+        match self.options.printer {
+            PrinterType::Graphviz => {
+                trace!("Using Graphviz printer ...");
+                let printer = graphviz::Printer::new(&self.options, krate, db, edition);
+                printer.fmt(&mut string, &graph, crate_node_idx)?;
+            }
+            PrinterType::D2 => {
+                trace!("Using D2 printer ...");
+                let printer = d2::Printer::new(&self.options, krate, db, edition);
+                printer.fmt(&mut string, &graph, crate_node_idx)?;
+            }
+        }
 
         print!("{string}");
 
