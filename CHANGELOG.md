@@ -24,7 +24,17 @@ Please make sure to add your changes to the appropriate categories:
 
 ### Changed
 
-- n/a
+- Updated dependencies:
+  - `rust-analyzer` from `0.0.264` to `0.0.268`
+  - `anyhow` from `1.0.94` to `1.0.97`
+  - `clap` from `4.5.23` to `4.5.31`
+  - `env_logger` from `0.11.5` to `0.11.6`
+  - `indoc` from `2.0.5` to `2.0.6`
+  - `libc` from `0.2.168` to `0.2.170`
+  - `log` from `0.4.22` to `0.4.26`
+  - `pulldown-cmark` from `0.12.0` to `0.13.0`
+- Bumped MSRV from `1.84.0` to `1.85.0`
+- Bumped edition from `2021` to `2024`
 
 ### Deprecated
 
@@ -36,7 +46,7 @@ Please make sure to add your changes to the appropriate categories:
 
 ### Fixed
 
-- n/a
+- Fixed a bug that would filter out all items with a `#[cfg(…)]`, given `--cfg_test "false"`, not just those with `#[cfg(test)]`.
 
 ### Performance
 
